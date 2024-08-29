@@ -20,6 +20,6 @@ const cartSchema = new mongoose.Schema({
     ]
 })
 cartSchema.plugin(mongoosePaginate);
-const CartModel = mongoose.model("carts", cartSchema)
+const CartModel = mongoose.model("Cart", cartSchema)
 
 export default CartModel

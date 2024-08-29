@@ -11,10 +11,19 @@ cartRouter.post("/", async (req,res)=>{
         console.log(error);
     }
 })
+cartRouter.get("/", async (req, res) => {
+    try {
+        const carts = await cartManager.getCarts().populate("products.product");
+        res.json(carts);
+    } catch (error) {
+        res.status(500).send("Error: obtener los carritos");
+        console.log(error);
+    }
+});
 cartRouter.get("/:cid", async (req, res) => {
     let cid = req.params.cid;
     try{
-        const cart = await cartManager.getCartById(cid)
+        const cart = await cartManager.getCartById(cid).populate("products.product");
         res.json(cart.products)
     }catch(error){
         res.send("Error: obtener producto")

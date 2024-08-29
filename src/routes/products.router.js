@@ -3,10 +3,27 @@ import {productManager} from "../app.js";
 
 const productsRouter = Router();
 productsRouter.get("/", async (req, res) => {
-    try{    
-        const result = await productManager.getProducts(req.query);
-        res.send({ 
-            result: "success", 
+    try {
+        const { limit = 10, page = 1, sort, query } = req.query;
+        const filter = {};
+
+        if (query) {
+            filter.$or = [
+                { category: query },
+                { status: query }
+            ];
+        }
+
+        const options = {
+            limit: parseInt(limit),
+            page: parseInt(page),
+            sort: sort ? { price: sort === 'asc' ? 1 : -1 } : {}
+        };
+
+        const result = await ProductModel.paginate(filter, options);
+
+        res.send({
+            status: "success",
             payload: result.docs,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
@@ -14,15 +31,14 @@ productsRouter.get("/", async (req, res) => {
             page: result.page,
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
-            prevLink: result.prevLink = result.hasPrevPage ? `http://localhost:8080/?page=${result.prevPage}` : null,
-            nextLink: result.nextLink = result.hasNextPage ? `http://localhost:8080/?page=${result.nextPage}` : null,
-            isValid: result.docs.length > 0
+            prevLink: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : null,
+            nextLink: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : null
         });
-        console.log(result)       
-    }catch (error){
-        res.send("Error: consultar los productos")
+    } catch (error) {
+        res.status(500).send("Error en consultar los productos");
         console.log(error);
-        }})
+    }
+});
 productsRouter.get("/:pid", async (req, res) =>{
     let pid = req.params.pid;
     try{
