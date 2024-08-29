@@ -1,0 +1,30 @@
+h1 {
+    color: rgb(67, 199, 87);
+    text-align: center;
+}
+
+h2 {
+    color:rgb(179, 0, 255);
+    text-align: center;
+}
+
+.divProductos{
+    text-align:center;
+}
+
+#productsList {
+    text-align: center;
+}
+
+#formulario{
+    text-align: center;
+}
+
+#button{
+    color: rgb(40, 176, 58);
+    background-color: rgb(170, 230, 166);
+}
+.delete-button{
+    color: red;
+    background-color: rgb(237, 215, 189);
+}
